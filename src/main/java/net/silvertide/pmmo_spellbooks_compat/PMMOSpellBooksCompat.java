@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
+// Branch for mixin reference.
 @Mod(PMMOSpellBooksCompat.MOD_ID)
 public class PMMOSpellBooksCompat
 {
