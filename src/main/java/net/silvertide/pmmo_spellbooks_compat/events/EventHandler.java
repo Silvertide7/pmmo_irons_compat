@@ -29,11 +29,10 @@ public class EventHandler {
     @SubscribeEvent
     public static void entityHealedEvent(SpellHealEvent healEvent) {
         LivingEntity targetEntity = healEvent.getTargetEntity();
-        Player caster = (Player) healEvent.getEntity();
         if(targetEntity == null) return;
 
         // Only trigger xp for healing another entity.
-        if(!caster.level().isClientSide()) {
+        if(healEvent.getEntity() instanceof Player caster && !caster.level().isClientSide()) {
             float amountHealed = CompatUtil.getAmountHealed(targetEntity, healEvent.getHealAmount());
             if(amountHealed > 0) {
                 if(targetEntity.getUUID() != caster.getUUID()){
@@ -49,15 +48,16 @@ public class EventHandler {
     public static void onSpellCast(SpellPreCastEvent spellPreCastEvent) {
         if (spellPreCastEvent.isCanceled()) return;
 
-        Map<ResourceLocation, SpellRequirement> spellReqMap = SpellRequirements.DATA_LOADER.getData();
-        if(!spellReqMap.isEmpty()) {
-            ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spellPreCastEvent.getSpellId());
-            if(spellResourceLocation != null) {
-                SpellEventResult castResult = CompatUtil.canCastSpell(spellPreCastEvent, spellReqMap.get(spellResourceLocation));
-                if(!castResult.wasSuccessful()) {
-                    spellPreCastEvent.setCanceled(true);
-                    ServerPlayer serverPlayer = (ServerPlayer) spellPreCastEvent.getEntity();
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal("You must be level " + castResult.errorMessage() + " to cast this.").withStyle(ChatFormatting.RED)));
+        if(spellPreCastEvent.getEntity() instanceof ServerPlayer serverPlayer) {
+            Map<ResourceLocation, SpellRequirement> spellReqMap = SpellRequirements.DATA_LOADER.getData();
+            if(!spellReqMap.isEmpty()) {
+                ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spellPreCastEvent.getSpellId());
+                if(spellResourceLocation != null) {
+                    SpellEventResult castResult = CompatUtil.canCastSpell(spellPreCastEvent, spellReqMap.get(spellResourceLocation));
+                    if(!castResult.wasSuccessful()) {
+                        spellPreCastEvent.setCanceled(true);
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal("You must be level " + castResult.errorMessage() + " to cast this.").withStyle(ChatFormatting.RED)));
+                    }
                 }
             }
         }
@@ -67,16 +67,17 @@ public class EventHandler {
     public static void onSpellInscribe(InscribeSpellEvent inscribeEvent) {
         if (inscribeEvent.isCanceled()) return;
 
-        Map<ResourceLocation, SpellRequirement> spellReqMap = SpellRequirements.DATA_LOADER.getData();
-        if(!spellReqMap.isEmpty()) {
-            AbstractSpell spell = inscribeEvent.getSpellData().getSpell();
-            ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spell.getSpellId());
-            if(spellResourceLocation != null) {
-                SpellEventResult inscribeResult = CompatUtil.canInscribeSpell(inscribeEvent, spellReqMap.get(spellResourceLocation));
-                if(!inscribeResult.wasSuccessful()) {
-                    inscribeEvent.setCanceled(true);
-                    ServerPlayer serverPlayer = (ServerPlayer) inscribeEvent.getEntity();
-                    serverPlayer.sendSystemMessage(Component.literal("You must be level " + inscribeResult.errorMessage() + " to inscribe level " + inscribeEvent.getSpellData().getLevel() + " " + spell.getSpellName() + ".").withStyle(ChatFormatting.RED));
+        if(inscribeEvent.getEntity() instanceof ServerPlayer serverPlayer) {
+            Map<ResourceLocation, SpellRequirement> spellReqMap = SpellRequirements.DATA_LOADER.getData();
+            if(!spellReqMap.isEmpty()) {
+                AbstractSpell spell = inscribeEvent.getSpellData().getSpell();
+                ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spell.getSpellId());
+                if(spellResourceLocation != null) {
+                    SpellEventResult inscribeResult = CompatUtil.canInscribeSpell(inscribeEvent, spellReqMap.get(spellResourceLocation));
+                    if(!inscribeResult.wasSuccessful()) {
+                        inscribeEvent.setCanceled(true);
+                        serverPlayer.sendSystemMessage(Component.literal("You must be level " + inscribeResult.errorMessage() + " to inscribe level " + inscribeEvent.getSpellData().getLevel() + " " + spell.getSpellName() + ".").withStyle(ChatFormatting.RED));
+                    }
                 }
             }
         }
