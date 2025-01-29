@@ -1,17 +1,16 @@
 package net.silvertide.pmmo_spellbooks_compat.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class Config {
-    private static final ForgeConfigSpec.Builder BUILDER;
-    public static final ForgeConfigSpec COMMON_CONFIG;
-    public static final ForgeConfigSpec.ConfigValue<String> HEAL_SELF_SKILL;
-    public static final ForgeConfigSpec.ConfigValue<Integer> HEAL_SELF_XP_REWARD;
-    public static final ForgeConfigSpec.ConfigValue<String> HEAL_OTHER_SKILL;
-    public static final ForgeConfigSpec.ConfigValue<Integer> HEAL_OTHER_XP_REWARD;
+public class ServerConfig {
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    public static final ModConfigSpec SPEC;
+    public static final ModConfigSpec.ConfigValue<String> HEAL_SELF_SKILL;
+    public static final ModConfigSpec.ConfigValue<Integer> HEAL_SELF_XP_REWARD;
+    public static final ModConfigSpec.ConfigValue<String> HEAL_OTHER_SKILL;
+    public static final ModConfigSpec.ConfigValue<Integer> HEAL_OTHER_XP_REWARD;
 
     static {
-        BUILDER = new ForgeConfigSpec.Builder();
 
         BUILDER.push("Heal XP Configs");
 
@@ -39,6 +38,6 @@ public class Config {
 
         BUILDER.pop();
 
-        COMMON_CONFIG = BUILDER.build();
+        SPEC = BUILDER.build();
     }
 }

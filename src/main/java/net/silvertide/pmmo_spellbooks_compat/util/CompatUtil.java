@@ -24,7 +24,7 @@ public class CompatUtil {
     public static ResourceLocation getCompatResourceLocation(String spellId){
         int colonIndex = spellId.indexOf(':');
         if(colonIndex != -1) {
-            return new ResourceLocation(PMMOSpellBooksCompat.MOD_ID, spellId.substring(colonIndex+1));
+            return ResourceLocation.fromNamespaceAndPath(PMMOSpellBooksCompat.MOD_ID, spellId.substring(colonIndex+1));
         } else {
             return null;
         }
@@ -87,6 +87,6 @@ public class CompatUtil {
         CoreUtils.processSkillGroupXP(xpMap);
 
         IDataStorage data = Core.get(player.level()).getData();
-        xpMap.forEach((key, value) -> data.setXpDiff(player.getUUID(), key, value));
+        xpMap.forEach((key, value) -> data.addXp(player.getUUID(), key, value));
     }
 }

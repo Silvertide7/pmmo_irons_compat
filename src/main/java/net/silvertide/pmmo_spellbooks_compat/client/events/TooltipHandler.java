@@ -9,18 +9,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.silvertide.pmmo_spellbooks_compat.PMMOSpellBooksCompat;
+import net.silvertide.pmmo_spellbooks_compat.client.ClientSpellRequirements;
 import net.silvertide.pmmo_spellbooks_compat.config.codecs.SpellRequirement;
-import net.silvertide.pmmo_spellbooks_compat.network.SpellRequirementSyncPacket;
 import net.silvertide.pmmo_spellbooks_compat.util.CompatUtil;
 
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid= PMMOSpellBooksCompat.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE, value= Dist.CLIENT)
+@EventBusSubscriber(modid= PMMOSpellBooksCompat.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value=Dist.CLIENT)
 public class TooltipHandler {
 
     @SubscribeEvent
@@ -29,8 +29,7 @@ public class TooltipHandler {
         if(player != null) {
             ItemStack stack = event.getItemStack();
             if(stack.getItem() instanceof Scroll) {
-                Map<ResourceLocation, SpellRequirement> spellReqMap = SpellRequirementSyncPacket.SYNCED_DATA;
-                if(spellReqMap.size() > 0) {
+                ClientSpellRequirements.getSyncedData().ifPresent(spellReqMap -> {
                     SpellData spellData = ISpellContainer.get(stack).getSpellAtIndex(0);
                     AbstractSpell spellCast = spellData.getSpell();
                     ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spellCast.getSpellId());
@@ -43,7 +42,7 @@ public class TooltipHandler {
                             }
                         }
                     }
-                }
+                });
             }
         }
     }
