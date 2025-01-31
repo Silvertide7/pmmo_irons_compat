@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 public class PMMOSpellBooksCompat {
     public static final String MOD_ID = "pmmo_spellbooks_compat";
     public static final Logger LOGGER = LogUtils.getLogger();
-
-    //TODO: No message is popping up on inscription table when cant inscribe
     public PMMOSpellBooksCompat(IEventBus modEventBus, ModContainer modContainer)
     {
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, String.format("%s-server.toml", MOD_ID));
