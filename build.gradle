@@ -19,14 +19,22 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
-    maven {
-        url 'https://cursemaven.com'
-        content { includeGroup 'curse.maven' }
-    }
+
     maven {
         name = "Iron's Maven - Release"
         url = "https://code.redspace.io/releases"
     }
+    maven { url = "https://maven.enginehub.org/repo/" }
+    maven {
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
+    maven { url = "https://maven.theillusivec4.top" }
+    maven { url = "https://cursemaven.com" }
+    maven { url = "https://maven.blamejared.com" }
+    maven { url = "https://maven.kosmx.dev/" }
 }
 
 test {
@@ -139,28 +147,22 @@ configurations {
 }
 
 dependencies {
-    testImplementation(platform('org.junit:junit-bom:5.11.4'))
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-
-    // PROJECT MMO ------
+    // PROJECT MMO ************************************************************************************************
     implementation "curse.maven:pmmo-353935:${pmmo_version}"
 
     // IRONS SPELLS N SPELLBOOKS **********************************************************************************
-    compileOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"
-    runtimeOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"
-
-    // GECKOLIB ***************************************************************************************************
-    runtimeOnly "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
-
-    // CAELUS *****************************************************************************************************
-    runtimeOnly "top.theillusivec4.caelus:caelus-forge:${caelus_version}"
-
-    // PLAYER ANIMATOR ********************************************************************************************
-    implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
-
-    // CURIOS *****************************************************************************************************
-    runtimeOnly "top.theillusivec4.curios:curios-forge:${curios_version}"
+    implementation "io.redspace:irons_spellbooks:${irons_spells_version}"
+//    compileOnly "io.redspace:irons_spellbooks:${irons_spells_version}:api"
+//    localRuntime "io.redspace:irons_spellbooks:${irons_spells_version}"
+//
+//    // GECKOLIB ***************************************************************************************************
+    localRuntime "software.bernie.geckolib:geckolib-neoforge-1.21:${geckolib_version}"
+//
+//    // PLAYER ANIMATOR ********************************************************************************************
+    localRuntime "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
+//
+//    // CURIOS *****************************************************************************************************
+    localRuntime "curse.maven:adorned-1036809:5546365"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

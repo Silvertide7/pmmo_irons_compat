@@ -1,10 +1,10 @@
 package net.silvertide.pmmo_spellbooks_compat.client.events;
 
 import harmonised.pmmo.core.CoreUtils;
+import io.redspace.ironsspellbooks.api.item.IScroll;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
-import io.redspace.ironsspellbooks.item.Scroll;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +28,7 @@ public class TooltipHandler {
         Player player = event.getEntity();
         if(player != null) {
             ItemStack stack = event.getItemStack();
-            if(stack.getItem() instanceof Scroll) {
+            if(stack.getItem() instanceof IScroll) {
                 ClientSpellRequirements.getSyncedData().ifPresent(spellReqMap -> {
                     SpellData spellData = ISpellContainer.get(stack).getSpellAtIndex(0);
                     AbstractSpell spellCast = spellData.getSpell();

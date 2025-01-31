@@ -87,7 +87,7 @@ public class PackGenerator {
 
     private static JsonElement getPackObject() {
         McMeta pack = new McMeta(
-                new Pack("Generated Resources", 9),
+                new Pack("Generated For PMMO Irons Spellbooks Compat Config", 15),
                 Optional.empty());
 
         return McMeta.CODEC.encodeStart(JsonOps.INSTANCE, pack).result().get();
