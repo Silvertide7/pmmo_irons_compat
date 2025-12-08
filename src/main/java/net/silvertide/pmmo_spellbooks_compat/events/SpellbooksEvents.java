@@ -53,7 +53,7 @@ public class SpellbooksEvents {
                     SpellEventResult castResult = CompatUtil.canCastSpell(spellPreCastEvent, spellReqMap.get(spellResourceLocation));
                     if(!castResult.wasSuccessful()) {
                         spellPreCastEvent.setCanceled(true);
-                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal("You must be level " + castResult.errorMessage() + " to cast this.").withStyle(ChatFormatting.RED)));
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(castResult.getCastMessage()));
                     }
                 }
             });
@@ -72,7 +72,7 @@ public class SpellbooksEvents {
                     SpellEventResult inscribeResult = CompatUtil.canInscribeSpell(inscribeEvent, spellReqMap.get(spellResourceLocation));
                     if(!inscribeResult.wasSuccessful()) {
                         inscribeEvent.setCanceled(true);
-                        serverPlayer.sendSystemMessage(Component.literal("You must be level " + inscribeResult.errorMessage() + " to inscribe level " + inscribeEvent.getSpellData().getLevel() + " " + spell.getSpellName() + ".").withStyle(ChatFormatting.RED));
+                        serverPlayer.sendSystemMessage(inscribeResult.getInscribeMessage(inscribeEvent.getSpellData().getLevel(),spell.getSpellName()));
                     }
                 }
             });

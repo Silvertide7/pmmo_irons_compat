@@ -2,7 +2,8 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.75'
+    id 'net.neoforged.moddev' version '2.0.122'
+    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -203,6 +204,27 @@ publishing {
         maven {
             url "file://${project.projectDir}/repo"
         }
+    }
+}
+
+publishMods {
+    file = jar.archiveFile
+    modLoaders.add("neoforge")
+    changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
+    version = "${minecraft_version}-${mod_version}"
+    type = STABLE
+    displayName = "artifactory-${minecraft_version}-${mod_version}"
+
+    curseforge {
+        projectId = "${curseforge_project}"
+        accessToken = System.getenv("CF_TOKEN")
+
+        minecraftVersions.add(minecraft_version)
+        javaVersions.add(JavaVersion.VERSION_21)
+
+        clientRequired = true
+        serverRequired = true
+        requires("pmmo", "irons_spellbooks")
     }
 }
 

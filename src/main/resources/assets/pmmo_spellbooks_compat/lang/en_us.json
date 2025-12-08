@@ -1,0 +1,4 @@
+{
+  "pmmo_spellbooks_compat.actionbar.cast_message": "Requires %2$s level %1$s to cast.",
+  "pmmo_spellbooks_compat.actionbar.inscribe_message": "Requires %2$s level %1$s to inscribe %4$s level %3$s."
+}
