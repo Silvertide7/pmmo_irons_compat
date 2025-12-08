@@ -1,5 +1,7 @@
 package net.silvertide.pmmo_spellbooks_compat.events;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.core.Core;
 import io.redspace.ironsspellbooks.api.events.InscribeSpellEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
@@ -47,6 +49,8 @@ public class SpellbooksEvents {
         if (spellPreCastEvent.isCanceled()) return;
 
         if(spellPreCastEvent.getEntity() instanceof ServerPlayer serverPlayer) {
+            if(CompatUtil.playerIgnoresPmmoRequirements(serverPlayer)) return;
+
             DataPackUtil.getSpellRequirementsDataMap().ifPresent(spellReqMap -> {
                 ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spellPreCastEvent.getSpellId());
                 if(spellResourceLocation != null) {
@@ -65,6 +69,8 @@ public class SpellbooksEvents {
         if (inscribeEvent.isCanceled()) return;
 
         if(inscribeEvent.getEntity() instanceof ServerPlayer serverPlayer) {
+            if(CompatUtil.playerIgnoresPmmoRequirements(serverPlayer)) return;
+
             DataPackUtil.getSpellRequirementsDataMap().ifPresent(spellReqMap -> {
                 AbstractSpell spell = inscribeEvent.getSpellData().getSpell();
                 ResourceLocation spellResourceLocation = CompatUtil.getCompatResourceLocation(spell.getSpellId());

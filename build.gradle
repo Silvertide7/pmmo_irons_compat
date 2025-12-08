@@ -213,7 +213,7 @@ publishMods {
     changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
     version = "${minecraft_version}-${mod_version}"
     type = STABLE
-    displayName = "artifactory-${minecraft_version}-${mod_version}"
+    displayName = "pmmo_irons_spellbooks_compat-${minecraft_version}-${mod_version}"
 
     curseforge {
         projectId = "${curseforge_project}"
@@ -224,7 +224,7 @@ publishMods {
 
         clientRequired = true
         serverRequired = true
-        requires("pmmo", "irons_spellbooks")
+        requires("project-mmo", "irons-spells-n-spellbooks")
     }
 }
 

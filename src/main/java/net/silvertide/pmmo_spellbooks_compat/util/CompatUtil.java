@@ -5,11 +5,12 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.util.Reference;
 import io.redspace.ironsspellbooks.api.events.InscribeSpellEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.silvertide.pmmo_spellbooks_compat.PMMOSpellBooksCompat;
@@ -73,6 +74,11 @@ public class CompatUtil {
         }
 
         return SpellEventResult.getSuccessfulResult();
+    }
+
+    public static boolean playerIgnoresPmmoRequirements(ServerPlayer player) {
+        Core core = Core.get(player.level());
+        return core.getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq();
     }
 
     public static float getAmountHealed(LivingEntity targetEntity, float healAmount) {
