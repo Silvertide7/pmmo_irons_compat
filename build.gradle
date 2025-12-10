@@ -5,6 +5,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
+//    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 }
 
 version = mod_version
@@ -136,58 +137,34 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // PROJECT MMO ------
-    implementation fg.deobf("curse.maven:pmmo-353935:${pmmo_version}")
-
-    // IRONS SPELLS N SPELLBOOKS **********************************************************************************
-    implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${minecraft_version}-${irons_spells_version}"){
-        transitive = false
-    }
-// FORGE ******************************************************************************************************
+    // FORGE ******************************************************************************************************
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // MIXINS *****************************************************************************************************
-//    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
+    // PROJECT MMO ------
+    compileOnly fg.deobf("curse.maven:pmmo-353935:${pmmo_version}")
+    runtimeOnly fg.deobf("curse.maven:pmmo-353935:${pmmo_version}")
+
+    // IRONS SPELLS N SPELLBOOKS **********************************************************************************
+    compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${minecraft_version}-${irons_spells_version}"){
+        transitive = false
+    }
+    runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${minecraft_version}-${irons_spells_version}"){
+        transitive = false
+    }
     // GECKOLIB ***************************************************************************************************
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${geckolib_version}")
-
+    runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${geckolib_version}")
     // CAELUS *****************************************************************************************************
-    compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
-
     // PLAYER ANIMATOR ********************************************************************************************
-    implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
-
-    // TETRA ******************************************************************************************************
-    //compileOnly fg.deobf("se.mickelus.mutil:mutil:${mutil_version}")
-    implementation fg.deobf("curse.maven:tetra-${tetra_version}")
-    implementation fg.deobf("curse.maven:mutil-351914:4824501")
-
-    // JEI ********************************************************************************************************
-    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
-
+    runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
     // CURIOS *****************************************************************************************************
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    //Uncomment the following line to run with Curios in dev
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
 
-    // PATCHOULI **************************************************************************************************
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-
-    // APOTHEOSIS
-    runtimeOnly fg.deobf("curse.maven:placebo-${placebo_version}")
-//    runtimeOnly fg.deobf("curse.maven:apothic-curios-950712:5108914")
-
-    //QOL
-//    runtimeOnly fg.deobf("curse.maven:tslatentitystatus-tes-830420:5011935")
-//    runtimeOnly fg.deobf("curse.maven:mouse-tweaks-60089:4581240")
-
     // JSON ******************************************************************************************************
-    implementation "com.google.code.gson:gson:${gson_version}"
+//    implementation "com.google.code.gson:gson:${gson_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -245,6 +222,27 @@ publishing {
         }
     }
 }
+
+//publishMods {
+//    file = jar.archiveFile
+//    modLoaders.add("neoforge")
+//    changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
+//    version = "${minecraft_version}-${mod_version}"
+//    type = STABLE
+//    displayName = "pmmo_spellbooks_compat-${minecraft_version}-${mod_version}"
+//
+//    curseforge {
+//        projectId = "${curseforge_project}"
+//        accessToken = System.getenv("CF_TOKEN")
+//
+//        minecraftVersions.add(minecraft_version)
+//        javaVersions.add(JavaVersion.VERSION_17)
+//
+//        clientRequired = true
+//        serverRequired = true
+//        requires("project-mmo", "irons-spells-n-spellbooks")
+//    }
+//}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation

@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.api.events.InscribeSpellEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.silvertide.pmmo_spellbooks_compat.PMMOSpellBooksCompat;
@@ -42,19 +43,20 @@ public class CompatUtil {
     public static SpellEventResult canCastSpell(SpellPreCastEvent spellPreCastEvent, SpellRequirement spellRequirement) {
         List<String> sources = spellRequirement.sources();
         String sourceString = stringifyCastSource(spellPreCastEvent.getCastSource());
+
         if(sources.size() > 0 && sourceString != null && sources.contains(sourceString)){
             Map<String, Integer> requirementMap = spellRequirement.getRequirementMap(spellPreCastEvent.getSpellLevel());
             if(requirementMap != null) {
                 for(String skill : requirementMap.keySet()) {
                     int requiredLevel = requirementMap.get(skill);
                     if(requiredLevel > APIUtils.getLevel(skill, spellPreCastEvent.getEntity())) {
-                        return new SpellEventResult(false, requiredLevel + " " + skill);
+                        return new SpellEventResult(false, skill, requiredLevel);
                     }
                 }
             }
         }
 
-        return new SpellEventResult(true, "");
+        return SpellEventResult.getSuccessfulResult();
     }
 
     public static SpellEventResult canInscribeSpell(InscribeSpellEvent inscribeEvent, SpellRequirement spellRequirement) {
@@ -64,13 +66,17 @@ public class CompatUtil {
                 for(String skill : requirementMap.keySet()) {
                     int requiredLevel = requirementMap.get(skill);
                     if(requiredLevel > APIUtils.getLevel(skill, inscribeEvent.getEntity())) {
-                        return new SpellEventResult(false, requiredLevel + " " + skill);
+                        return new SpellEventResult(false, skill, requiredLevel);
                     }
                 }
             }
         }
 
-        return new SpellEventResult(true, "");
+        return SpellEventResult.getSuccessfulResult();
+    }
+
+    public static boolean playerIgnoresPmmoRequirements(ServerPlayer player) {
+        return Core.get(player.level()).getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq();
     }
 
     public static float getAmountHealed(LivingEntity targetEntity, float healAmount) {
