@@ -5,7 +5,6 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
-//    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 }
 
 version = mod_version
@@ -162,9 +161,6 @@ dependencies {
     runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
     // CURIOS *****************************************************************************************************
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
-
-    // JSON ******************************************************************************************************
-//    implementation "com.google.code.gson:gson:${gson_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -222,27 +218,6 @@ publishing {
         }
     }
 }
-
-//publishMods {
-//    file = jar.archiveFile
-//    modLoaders.add("neoforge")
-//    changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
-//    version = "${minecraft_version}-${mod_version}"
-//    type = STABLE
-//    displayName = "pmmo_spellbooks_compat-${minecraft_version}-${mod_version}"
-//
-//    curseforge {
-//        projectId = "${curseforge_project}"
-//        accessToken = System.getenv("CF_TOKEN")
-//
-//        minecraftVersions.add(minecraft_version)
-//        javaVersions.add(JavaVersion.VERSION_17)
-//
-//        clientRequired = true
-//        serverRequired = true
-//        requires("project-mmo", "irons-spells-n-spellbooks")
-//    }
-//}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
