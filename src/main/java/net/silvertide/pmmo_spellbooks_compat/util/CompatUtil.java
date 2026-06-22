@@ -42,6 +42,10 @@ public class CompatUtil {
     }
 
     public static SpellEventResult canCastSpell(SpellPreCastEvent spellPreCastEvent, SpellRequirement spellRequirement) {
+        if (spellRequirement == null) {
+            return SpellEventResult.getSuccessfulResult();
+        }
+
         List<String> sources = spellRequirement.sources();
         String sourceString = stringifyCastSource(spellPreCastEvent.getCastSource());
 
@@ -61,6 +65,10 @@ public class CompatUtil {
     }
 
     public static SpellEventResult canInscribeSpell(InscribeSpellEvent inscribeEvent, SpellRequirement spellRequirement) {
+        if (spellRequirement == null) {
+            return SpellEventResult.getSuccessfulResult();
+        }
+
         if(spellRequirement.sources().contains("inscribe")) {
             Map<String, Integer> requirementMap = spellRequirement.getRequirementMap(inscribeEvent.getSpellData().getLevel());
             if(requirementMap != null) {

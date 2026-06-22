@@ -226,6 +226,17 @@ publishMods {
         serverRequired = true
         requires("project-mmo", "irons-spells-n-spellbooks")
     }
+
+    discord {
+        webhookUrl = providers.environmentVariable("DISCORD_WEBHOOK_URL")
+        dryRunWebhookUrl = providers.environmentVariable("DISCORD_WEBHOOK_TEST_URL")
+        username = "Project MMO: Iron's Spellbooks Compat"
+        style {
+            look = "MODERN"
+            color = "curseforge"
+            link = "EMBED"
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
