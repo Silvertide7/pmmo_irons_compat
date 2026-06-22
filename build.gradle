@@ -217,7 +217,8 @@ publishMods {
 
     curseforge {
         projectId = "${curseforge_project}"
-        accessToken = System.getenv("CF_TOKEN")
+        projectSlug = "pmmo_spellbooks_compat"
+        accessToken = providers.environmentVariable("CF_TOKEN")
 
         minecraftVersions.add(minecraft_version)
         javaVersions.add(JavaVersion.VERSION_21)
