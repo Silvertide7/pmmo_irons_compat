@@ -134,7 +134,7 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
             map.put(id, merger.apply(raws));
         }
 
-        LOGGER.info("Data loader for {} loaded {} finalized objects", this.folderName, this.data.size());
+        LOGGER.info("Data loader for {} loaded {} finalized objects", this.folderName, map.size());
         return Map.copyOf(map);
     }
 

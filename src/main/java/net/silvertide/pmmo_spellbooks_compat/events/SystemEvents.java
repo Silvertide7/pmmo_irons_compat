@@ -10,7 +10,6 @@ import net.silvertide.pmmo_spellbooks_compat.PMMOSpellBooksCompat;
 import net.silvertide.pmmo_spellbooks_compat.commands.CmdPmmoSpellBooksRoot;
 import net.silvertide.pmmo_spellbooks_compat.config.codecs.SpellRequirements;
 import net.silvertide.pmmo_spellbooks_compat.network.client_packets.CB_SyncDatapackData;
-import net.silvertide.pmmo_spellbooks_compat.util.DataPackUtil;
 
 @EventBusSubscriber(modid = PMMOSpellBooksCompat.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class SystemEvents {
@@ -22,10 +21,9 @@ public class SystemEvents {
 
     @SubscribeEvent
     public static void onDatapackReload(OnDatapackSyncEvent event) {
-        DataPackUtil.getSpellRequirementsDataMap().ifPresent(dataMap -> {
-            event.getRelevantPlayers().forEach(serverPlayer ->
-                    PacketDistributor.sendToPlayer(serverPlayer, new CB_SyncDatapackData(dataMap)));
-        });
+        // Always sync, even when empty, so the client drops requirements left over from a previous world or load.
+        CB_SyncDatapackData packet = new CB_SyncDatapackData(SpellRequirements.DATA_LOADER.getData());
+        event.getRelevantPlayers().forEach(serverPlayer -> PacketDistributor.sendToPlayer(serverPlayer, packet));
     }
 
     @SubscribeEvent
